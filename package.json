@@ -1,0 +1,16 @@
+{
+  "name": "waitlist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.958.0",
+    "babel-minify": "^0.5.1",
+    "dotenv": "^10.0.0"
+  }
+}
