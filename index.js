@@ -42,8 +42,9 @@ const formFields = [
 const addItemToCart = (newItem) => {
   const cart = getCart();
 
-  if (!cart) {
-    return;
+  if (cart === null) {
+    setCart([newItem]);
+    return 1;
   }
 
   const itemIndex = cart.findIndex((item) => item._id === newItem._id);
@@ -51,19 +52,23 @@ const addItemToCart = (newItem) => {
   itemIndex !== -1 ? (cart[itemIndex] = newItem) : cart.push(newItem);
 
   setCart(cart);
+
+  return cart.length;
 };
 
 // Removing an item from cart
-const removeItemFromCart = (removedItem) => {
+const removeItemFromCart = (itemId) => {
   const cart = getCart();
 
   if (!cart) {
-    return;
+    return -1;
   }
 
-  const newCart = cart.filter((item) => item._id !== removedItem._id);
+  const newCart = cart.filter((item) => item._id !== itemId);
 
   setCart(newCart);
+
+  return newCart.length;
 };
 
 // Getting the cart from localStorage
@@ -78,7 +83,13 @@ const setCart = (cart) => {
 
 // Get no. of items in cart
 const getCartSize = () => {
-  return getCart().length;
+  const cart = getCart();
+
+  if (cart === null) {
+    return 0;
+  }
+
+  return cart.length;
 };
 
 const isFormValid = () => {
