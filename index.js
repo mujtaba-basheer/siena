@@ -29,6 +29,7 @@ const formFields = [
     id: "quantity",
     slug: "quantity",
     validation: false,
+    isNumber: true,
   },
   {
     name: "itemId",
@@ -117,14 +118,15 @@ window.addEventListener("load", () => {
     ev.stopPropagation();
 
     if (isFormValid) {
-      const postData = {};
+      const formData = {};
       for (const formField of formFields) {
-        const { id, slug } = formField;
-        postData[slug] = document.getElementById(id).value;
+        const { id, slug, isNumber } = formField;
+        formData[slug] = document.getElementById(id).value;
+        if (isNumber) formData[slug] = Number(formData[slug]);
       }
 
-      console.log(JSON.stringify(postData));
-      addItemToCart(postData);
+      console.log(JSON.stringify(formData));
+      addItemToCart(formData);
     }
   });
 });
