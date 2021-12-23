@@ -1,5 +1,3 @@
-const { getCart, setCart, getCartSize } = require("./cart");
-
 const formId = "email-form";
 const formFields = [
   {
