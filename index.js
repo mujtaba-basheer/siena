@@ -38,6 +38,7 @@ const formFields = [
     validation: true,
   },
 ];
+const modalCloseBtn = "#close-modal";
 
 // Adding an item to cart
 const addItemToCart = (newItem) => {
@@ -125,8 +126,12 @@ window.addEventListener("load", () => {
         if (isNumber) formData[slug] = Number(formData[slug]);
       }
 
-      console.log(JSON.stringify(formData));
-      addItemToCart(formData);
+      const itemsNo = addItemToCart(formData);
+
+      // closing modal
+      $(modalCloseBtn)[0].click();
+      updateCartLength(itemsNo);
+      openCart();
     }
   });
 });
