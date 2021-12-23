@@ -1,3 +1,5 @@
+const { getCart, setCart, getCartSize } = require("./cart");
+
 const formId = "email-form";
 const formFields = [
   {
@@ -54,43 +56,7 @@ const addItemToCart = (newItem) => {
 
   setCart(cart);
 
-  return cart.length;
-};
-
-// Removing an item from cart
-const removeItemFromCart = (itemId) => {
-  const cart = getCart();
-
-  if (!cart) {
-    return -1;
-  }
-
-  const newCart = cart.filter((item) => item._id !== itemId);
-
-  setCart(newCart);
-
-  return newCart.length;
-};
-
-// Getting the cart from localStorage
-const getCart = () => {
-  return JSON.parse(localStorage.getItem("cart") || null);
-};
-
-// Setting new cart in localStorage
-const setCart = (cart) => {
-  localStorage.setItem("cart", JSON.stringify(cart));
-};
-
-// Get no. of items in cart
-const getCartSize = () => {
-  const cart = getCart();
-
-  if (cart === null) {
-    return 0;
-  }
-
-  return cart.length;
+  return getCartSize();
 };
 
 const isFormValid = () => {
