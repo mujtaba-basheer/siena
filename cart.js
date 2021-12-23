@@ -1,5 +1,5 @@
 // Removing an item from cart
-exports.removeItemFromCart = (itemId) => {
+const removeItemFromCart = (itemId) => {
   const cart = getCart();
 
   if (!cart) {
@@ -12,7 +12,7 @@ exports.removeItemFromCart = (itemId) => {
 };
 
 // Updating the quantity of an item from cart
-exports.updateItemFromCart = (itemId, newQty) => {
+const updateItemFromCart = (itemId, newQty) => {
   const cart = getCart();
 
   if (!cart) {
@@ -31,17 +31,17 @@ exports.updateItemFromCart = (itemId, newQty) => {
 }
 
 // Getting the cart from localStorage
-exports.getCart = () => {
+const getCart = () => {
   return JSON.parse(localStorage.getItem("cart") || null);
 };
 
 // Setting new cart in localStorage
-exports.setCart = (cart) => {
+const setCart = (cart) => {
   localStorage.setItem("cart", JSON.stringify(cart));
 };
 
 // Get no. of items in cart
-exports.getCartSize = () => {
+const getCartSize = () => {
   const cart = getCart();
 
   if (cart === null) {
