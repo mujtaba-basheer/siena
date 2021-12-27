@@ -1,6 +1,12 @@
 const formId = "email-form";
 const formFields = [
   {
+    name: "productName",
+    id: "product-name",
+    slug: "product_name",
+    validation: true,
+  },
+  {
     name: "projectName",
     id: "projectname",
     slug: "project_name",
@@ -96,6 +102,7 @@ window.addEventListener("load", () => {
       $(modalCloseBtn)[0].click();
       updateCartLength(itemsNo);
       openCart();
+      renderCartItems();
     }
   });
 });
