@@ -130,6 +130,9 @@ const getCartSize = () => {
   return cart.length;
 };
 
+// Clear cart items
+const clearCart = () => localStorage.setItem("cart", "");
+
 window.addEventListener("load", () => {
   const cartLength = getCartSize();
   updateCartLength(cartLength);
