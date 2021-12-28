@@ -1,9 +1,9 @@
-const cartOpen = "#open-cart > a";
+const cartOpen = "#open-cart";
 const cartItemsNo = "#cart-items";
-const cartForm = ".w-commerce-commercecartform";
-const cartListContainer = ".w-commerce-commercecartlist";
-const cartEmptyMsg = ".w-commerce-commercecartemptystate";
-const cartErrorMsg = ".w-commerce-commercecarterrorstate";
+const cartForm = ".cartform";
+const cartListContainer = ".cartlist";
+const cartEmptyMsg = ".cartemptystate";
+const cartErrorMsg = ".carterrorstate";
 
 const openCart = () => {
   $(cartOpen)[0].click();
@@ -15,30 +15,67 @@ const updateCartLength = (len = 0) => {
 
 const renderCartItems = () => {
   const createItemEl = (cartItem) => {
-    let { product_name: name, quantity, _id } = cartItem;
+    let { product_name: name, quantity, _id, product_img: img } = cartItem;
 
     const itemEl = document.createElement("div");
-    itemEl.classList.add("w-commerce-commercecartitem");
+    itemEl.classList.add("cartitem");
+    itemEl.classList.add("w-dyn-item");
+    itemEl.setAttribute("role", "listitem");
 
+    const itemElInner1 = document.createElement("div");
+    const itemElInner2 = document.createElement("div");
+    const itemElInner3 = document.createElement("div");
+    itemElInner2.classList.add("w-layout-grid");
+    itemElInner2.classList.add("grid-4");
+    itemElInner3.classList.add("div-block-28");
+
+    const imgDiv = document.createElement("div");
+    const imgEl = document.createElement("img");
+    imgEl.setAttribute("src", img);
+    imgEl.setAttribute("alt", name);
+    imgEl.setAttribute("loading", "lazy");
+    imgDiv.appendChild(imgEl);
+    itemElInner2.appendChild(imgDiv);
+
+    const infoDiv = document.createElement("div");
+    infoDiv.classList.add("div-block-28");
     const cartInfoEl = document.createElement("div");
-    cartInfoEl.classList.add("w-commerce-commercecartiteminfo");
+    cartInfoEl.classList.add("cartiteminfo");
     const cartNameEl = document.createElement("div");
-    cartNameEl.classList.add("w-commerce-commercecartproductname");
+    cartNameEl.classList.add("cartproductname");
+    cartNameEl.innerHTML = `
+    <div class="text-block-22">
+      ${name}
+    </div>
+    `;
     cartNameEl.textContent = name;
     const removeEl = document.createElement("a");
     removeEl.classList.add("w-inline-block");
     removeEl.setAttribute("href", "#");
-    removeEl.innerHTML = "<div>Remove</div>";
+    removeEl.innerHTML = `
+    <div>
+      <div class="text-block-23">Remove</div>
+    </div>`;
     removeEl.addEventListener("click", () => {
-      removeItemFromCart(_id);
+      const currCartLen = removeItemFromCart(_id);
       itemEl.remove();
+      updateCartLength(currCartLen);
     });
     cartInfoEl.appendChild(cartNameEl);
     cartInfoEl.appendChild(removeEl);
 
+    infoDiv.appendChild(cartInfoEl);
+
+    const inputDiv = document.createElement("div");
+    const formDiv = document.createElement("div");
+    formDiv.classList.add("w-form");
+    const formEl = document.createElement("form");
+    formEl.classList.add("cartform");
     const inputEl = document.createElement("input");
-    inputEl.classList.add("w-commerce-commercecartquantity");
+    inputEl.classList.add("cartquantity");
+    inputEl.classList.add("w-input");
     inputEl.setAttribute("type", "text");
+    inputEl.setAttribute("placeholder", "Quantity");
     inputEl.setAttribute("required", "");
     inputEl.setAttribute("pattern", "^[0-9]+$");
     inputEl.setAttribute("inputmode", "numeric");
@@ -49,19 +86,25 @@ const renderCartItems = () => {
         updateItemFromCart(_id, qty);
       }
     });
+    formEl.appendChild(inputEl);
+    formDiv.appendChild(formEl);
+    inputDiv.appendChild(formDiv);
 
-    itemEl.appendChild(cartInfoEl);
-    itemEl.appendChild(inputEl);
+    itemElInner3.appendChild(cartInfoEl);
+    itemElInner3.appendChild(inputDiv);
+    itemElInner2.appendChild(itemElInner3);
+    itemElInner1.appendChild(itemElInner2);
+    itemEl.appendChild(itemElInner1);
 
     return itemEl;
   };
 
   const cartListEl = document.querySelector(cartListContainer);
   cartListEl
-    .querySelectorAll("div.w-commerce-commercecartitem")
+    .querySelectorAll("div.cartitem")
     .forEach((itemEl) => itemEl.remove());
 
-  const cart = getCart();
+  const cart = getCart() || [];
   if (cart.length > 0) {
     const cartEmptyEl = document.querySelector(cartEmptyMsg),
       cartErrorEl = document.querySelector(cartErrorMsg);
@@ -74,7 +117,7 @@ const renderCartItems = () => {
     cartListEl.appendChild(itemEl);
   }
 
-  document.querySelector(cartForm).style.display = "flex";
+  // document.querySelector(cartForm).style.display = "flex";
 };
 
 // Removing an item from cart
@@ -137,45 +180,45 @@ window.addEventListener("load", () => {
   const cartLength = getCartSize();
   updateCartLength(cartLength);
 
-  const callback1 = (mutationList, observer) => {
-    mutationList.forEach((mutation) => {
-      switch (mutation.type) {
-        case "childList":
-          observer.disconnect();
-          updateCartLength(cartLength);
-          break;
-        default:
-          break;
-      }
-    });
-  };
-  const targetNode1 = document.querySelector(cartItemsNo);
-  const observerOptions1 = {
-    childList: true,
-  };
-  const observer1 = new MutationObserver(callback1);
-  observer1.observe(targetNode1, observerOptions1);
+  // const callback1 = (mutationList, observer) => {
+  //   mutationList.forEach((mutation) => {
+  //     switch (mutation.type) {
+  //       case "childList":
+  //         observer.disconnect();
+  //         updateCartLength(cartLength);
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //   });
+  // };
+  // const targetNode1 = document.querySelector(cartItemsNo);
+  // const observerOptions1 = {
+  //   childList: true,
+  // };
+  // const observer1 = new MutationObserver(callback1);
+  // observer1.observe(targetNode1, observerOptions1);
 
   renderCartItems();
-  const callback2 = (mutationList, observer) => {
-    mutationList.forEach((mutation) => {
-      console.log(mutation);
-      switch (mutation.type) {
-        case "childList":
-          observer.disconnect();
-          mutation.addedNodes.forEach((addedNode) => addedNode.remove());
-          renderCartItems();
-          break;
-        default:
-          break;
-      }
-    });
-  };
-  const targetNode2 = document.querySelector(cartListContainer);
-  const observerOptions2 = {
-    childList: true,
-    attributes: true,
-  };
-  const observer2 = new MutationObserver(callback2);
-  observer2.observe(targetNode2, observerOptions2);
+  // const callback2 = (mutationList, observer) => {
+  //   mutationList.forEach((mutation) => {
+  //     console.log(mutation);
+  //     switch (mutation.type) {
+  //       case "childList":
+  //         observer.disconnect();
+  //         mutation.addedNodes.forEach((addedNode) => addedNode.remove());
+  //         renderCartItems();
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //   });
+  // };
+  // const targetNode2 = document.querySelector(cartListContainer);
+  // const observerOptions2 = {
+  //   childList: true,
+  //   attributes: true,
+  // };
+  // const observer2 = new MutationObserver(callback2);
+  // observer2.observe(targetNode2, observerOptions2);
 });

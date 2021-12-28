@@ -7,6 +7,12 @@ const formFields = [
     validation: true,
   },
   {
+    name: "productImg",
+    id: "product-img",
+    slug: "product_img",
+    validation: true,
+  },
+  {
     name: "projectName",
     id: "projectname",
     slug: "project_name",
@@ -77,6 +83,7 @@ const isFormValid = () => {
     }
   }
 
+  console.log({ flag });
   return flag;
 };
 
@@ -88,7 +95,7 @@ window.addEventListener("load", () => {
     ev.stopImmediatePropagation();
     ev.stopPropagation();
 
-    if (isFormValid) {
+    if (isFormValid()) {
       const formData = {};
       for (const formField of formFields) {
         const { id, slug, isNumber } = formField;

@@ -14,6 +14,8 @@ const renderItems = () => {
     const itemDiv = document.createElement("div");
     itemDiv.classList.add("item-div");
     for (const key of Object.keys(item)) {
+      if (key === "product_img") continue;
+
       const fieldDiv = document.createElement("div");
       const labelEl = document.createElement("label");
       labelEl.textContent = key;
@@ -30,7 +32,7 @@ const renderItems = () => {
     return itemDiv;
   };
 
-  const cart = getCart();
+  const cart = getCart() || [];
   const formEl = document.getElementById(formId);
   const itemsContainerDiv = document.createElement("div");
   itemsContainerDiv.style.display = "none";
@@ -77,7 +79,10 @@ const sendFormData = (formData) => {
       },
       body: JSON.stringify(formData),
     })
-      .then((resp) => resp.json())
+      .then((resp) => {
+        if (resp.status === 200) return resp.json();
+        throw new Error(resp.statusText);
+      })
       .then((data) => {
         alert("Data Submitted Successfully! We'll contact you soon.");
         res(data);
