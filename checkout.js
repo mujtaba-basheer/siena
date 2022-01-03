@@ -100,11 +100,11 @@ window.addEventListener("load", function () {
 
     const formData = getFormData();
     try {
-      const resp = sendFormData(formData);
+      const resp = await sendFormData(formData);
       formEl.reset();
-      console.log(resp);
+      // console.log(resp);
       clearCart();
-      window.location.pathname = "/";
+      window.location.pathname = "/order-confirmation-page";
     } catch (error) {
       alert("Oops! There was some error! Please try again.");
     }
