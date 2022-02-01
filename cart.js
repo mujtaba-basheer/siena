@@ -6,7 +6,7 @@ const cartEmptyMsg = ".cartemptystate";
 const cartErrorMsg = ".carterrorstate";
 
 const openCart = () => {
-  $(cartOpen)[0].click();
+  $(cartOpen).trigger("click");
 };
 
 const updateCartLength = (len = 0) => {
@@ -15,7 +15,13 @@ const updateCartLength = (len = 0) => {
 
 const renderCartItems = () => {
   const createItemEl = (cartItem) => {
-    let { product_name: name, quantity, _id, product_img: img } = cartItem;
+    let {
+      product_name: name,
+      quantity,
+      _id,
+      product_img: img,
+      product_sku: sku,
+    } = cartItem;
 
     const itemEl = document.createElement("div");
     itemEl.classList.add("cartitem");
@@ -26,11 +32,13 @@ const renderCartItems = () => {
     const itemElInner2 = document.createElement("div");
     const itemElInner3 = document.createElement("div");
     itemElInner2.classList.add("w-layout-grid");
-    itemElInner2.classList.add("grid-4");
+    itemElInner2.classList.add("cart-items-wrapper");
     itemElInner3.classList.add("div-block-28");
 
     const imgDiv = document.createElement("div");
+    imgDiv.classList.add("cart-items-container");
     const imgEl = document.createElement("img");
+    imgEl.classList.add("cart-swatch");
     imgEl.setAttribute("src", img);
     imgEl.setAttribute("alt", name);
     imgEl.setAttribute("loading", "lazy");
@@ -44,17 +52,20 @@ const renderCartItems = () => {
     const cartNameEl = document.createElement("div");
     cartNameEl.classList.add("cartproductname");
     cartNameEl.innerHTML = `
-    <div class="text-block-22">
+    <div>
       ${name}
     </div>
+    <div class="text-style-muted">
+      ${sku}
+    </div>
     `;
-    cartNameEl.textContent = name;
+    // cartNameEl.textContent = name;
     const removeEl = document.createElement("a");
     removeEl.classList.add("w-inline-block");
     removeEl.setAttribute("href", "#");
     removeEl.innerHTML = `
     <div>
-      <div class="text-block-23">Remove</div>
+      <div class="error-text">Remove</div>
     </div>`;
     removeEl.addEventListener("click", () => {
       const currCartLen = removeItemFromCart(_id);
@@ -180,45 +191,5 @@ window.addEventListener("load", () => {
   const cartLength = getCartSize();
   updateCartLength(cartLength);
 
-  // const callback1 = (mutationList, observer) => {
-  //   mutationList.forEach((mutation) => {
-  //     switch (mutation.type) {
-  //       case "childList":
-  //         observer.disconnect();
-  //         updateCartLength(cartLength);
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //   });
-  // };
-  // const targetNode1 = document.querySelector(cartItemsNo);
-  // const observerOptions1 = {
-  //   childList: true,
-  // };
-  // const observer1 = new MutationObserver(callback1);
-  // observer1.observe(targetNode1, observerOptions1);
-
   renderCartItems();
-  // const callback2 = (mutationList, observer) => {
-  //   mutationList.forEach((mutation) => {
-  //     console.log(mutation);
-  //     switch (mutation.type) {
-  //       case "childList":
-  //         observer.disconnect();
-  //         mutation.addedNodes.forEach((addedNode) => addedNode.remove());
-  //         renderCartItems();
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //   });
-  // };
-  // const targetNode2 = document.querySelector(cartListContainer);
-  // const observerOptions2 = {
-  //   childList: true,
-  //   attributes: true,
-  // };
-  // const observer2 = new MutationObserver(callback2);
-  // observer2.observe(targetNode2, observerOptions2);
 });

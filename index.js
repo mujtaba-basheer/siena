@@ -13,30 +13,6 @@ const formFields = [
     validation: true,
   },
   {
-    name: "projectName",
-    id: "projectname",
-    slug: "project_name",
-    validation: true,
-  },
-  {
-    name: "projectType",
-    id: "projecttype",
-    slug: "project_type",
-    validation: true,
-  },
-  {
-    name: "projectPhase",
-    id: "projectphase",
-    slug: "project_phase",
-    validation: true,
-  },
-  {
-    name: "projectDescription",
-    id: "description",
-    slug: "project_description",
-    validation: false,
-  },
-  {
     name: "quantity",
     id: "quantity",
     slug: "quantity",
@@ -44,13 +20,18 @@ const formFields = [
     isNumber: true,
   },
   {
-    name: "itemId",
-    id: "item-id",
+    name: "itemSlug",
+    id: "item-slug",
     slug: "_id",
     validation: true,
   },
+  {
+    name: "productSKU",
+    id: "product-sku",
+    slug: "product_sku",
+    validation: true,
+  },
 ];
-const modalCloseBtn = "#close-modal";
 
 // Adding an item to cart
 const addItemToCart = (newItem) => {
@@ -83,7 +64,6 @@ const isFormValid = () => {
     }
   }
 
-  console.log({ flag });
   return flag;
 };
 
@@ -105,8 +85,6 @@ window.addEventListener("load", () => {
 
       const itemsNo = addItemToCart(formData);
 
-      // closing modal
-      $(modalCloseBtn)[0].click();
       updateCartLength(itemsNo);
       openCart();
       renderCartItems();

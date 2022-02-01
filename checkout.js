@@ -1,11 +1,12 @@
 const formId = "email-form";
 const dataNameMap = {
   product_name: "Product Name",
-  project_name: "Project Name",
-  project_type: "Project Type",
-  project_phase: "Project Phase",
-  project_description: "Project Description",
+  // project_name: "Project Name",
+  // project_type: "Project Type",
+  // project_phase: "Project Phase",
+  // project_description: "Project Description",
   quantity: "Quantity",
+  product_sku: "Product SKU",
   _id: "Product ID",
 };
 
@@ -49,7 +50,9 @@ const getFormData = () => {
     items: [],
   };
   const formEl = document.getElementById(formId);
-  let fields = formEl.querySelectorAll("input:not(.item-input)");
+  let fields = formEl.querySelectorAll(
+    `input:not(.item-input):not([type="submit"]), select, textarea`
+  );
   for (const field of fields) {
     const key = field.getAttribute("data-name");
     const val = field.value;
@@ -84,7 +87,7 @@ const sendFormData = (formData) => {
         throw new Error(resp.statusText);
       })
       .then((data) => {
-        alert("Data Submitted Successfully! We'll contact you soon.");
+        // alert("Data Submitted Successfully! We'll contact you soon.");
         res(data);
       })
       .catch((err) => rej(err));
@@ -99,11 +102,14 @@ window.addEventListener("load", function () {
     ev.stopPropagation();
 
     const formData = getFormData();
+    // console.log(JSON.stringify(formData));
+
     try {
       const resp = await sendFormData(formData);
       formEl.reset();
       // console.log(resp);
       clearCart();
+      updateCartLength();
       window.location.pathname = "/order-confirmation-page";
     } catch (error) {
       alert("Oops! There was some error! Please try again.");
