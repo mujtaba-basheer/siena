@@ -1,93 +1,66 @@
-const formId = "email-form";
-const formFields = [
-  {
-    name: "productName",
-    id: "product-name",
-    slug: "product_name",
-    validation: true,
+const formId = "email-form",
+  formFields = [
+    {
+      name: "productName",
+      id: "product-name",
+      slug: "product_name",
+      validation: !0,
+    },
+    {
+      name: "productImg",
+      id: "product-img",
+      slug: "product_img",
+      validation: !0,
+    },
+    {
+      name: "quantity",
+      id: "quantity",
+      slug: "quantity",
+      validation: !1,
+      isNumber: !0,
+    },
+    { name: "itemSlug", id: "item-slug", slug: "_id", validation: !0 },
+    {
+      name: "productSKU",
+      id: "product-sku",
+      slug: "product_sku",
+      validation: !0,
+    },
+  ],
+  addItemToCart = (a) => {
+    const b = getCart();
+    if (null === b) return setCart([a]), 1;
+    const c = b.findIndex((b) => b._id === a._id);
+    return -1 === c ? b.push(a) : (b[c] = a), setCart(b), getCartSize();
   },
-  {
-    name: "productImg",
-    id: "product-img",
-    slug: "product_img",
-    validation: true,
-  },
-  {
-    name: "quantity",
-    id: "quantity",
-    slug: "quantity",
-    validation: false,
-    isNumber: true,
-  },
-  {
-    name: "itemSlug",
-    id: "item-slug",
-    slug: "_id",
-    validation: true,
-  },
-  {
-    name: "productSKU",
-    id: "product-sku",
-    slug: "product_sku",
-    validation: true,
-  },
-];
-
-// Adding an item to cart
-const addItemToCart = (newItem) => {
-  const cart = getCart();
-
-  if (cart === null) {
-    setCart([newItem]);
-    return 1;
-  }
-
-  const itemIndex = cart.findIndex((item) => item._id === newItem._id);
-
-  itemIndex !== -1 ? (cart[itemIndex] = newItem) : cart.push(newItem);
-
-  setCart(cart);
-
-  return getCartSize();
-};
-
-const isFormValid = () => {
-  let flag = true;
-
-  for (const formField of formFields) {
-    if (formField.validation) {
-      const inputEl = document.getElementById(formField.id);
-      if (!inputEl.checkValidity()) {
-        flag = false;
-        break;
+  isFormValid = () => {
+    let a = !0;
+    for (const b of formFields)
+      if (b.validation) {
+        const c = document.getElementById(b.id);
+        if (!c.checkValidity()) {
+          a = !1;
+          break;
+        }
       }
-    }
-  }
-
-  return flag;
-};
-
+    return a;
+  };
 window.addEventListener("load", () => {
-  const formEl = document.getElementById(formId);
-
-  formEl.addEventListener("submit", (ev) => {
-    ev.preventDefault();
-    ev.stopImmediatePropagation();
-    ev.stopPropagation();
-
-    if (isFormValid()) {
-      const formData = {};
-      for (const formField of formFields) {
-        const { id, slug, isNumber } = formField;
-        formData[slug] = document.getElementById(id).value;
-        if (isNumber) formData[slug] = Number(formData[slug]);
+  const a = document.getElementById(formId);
+  a.addEventListener("submit", (a) => {
+    if (
+      (a.preventDefault(),
+      a.stopImmediatePropagation(),
+      a.stopPropagation(),
+      isFormValid())
+    ) {
+      const a = {};
+      for (const b of formFields) {
+        const { id: c, slug: d, isNumber: e } = b;
+        (a[d] = document.getElementById(c).value), e && (a[d] = +a[d]);
       }
-
-      const itemsNo = addItemToCart(formData);
-
-      updateCartLength(itemsNo);
-      openCart();
-      renderCartItems();
+      const b = addItemToCart(a);
+      updateCartLength(b), openCart(), renderCartItems();
     }
   });
 });
