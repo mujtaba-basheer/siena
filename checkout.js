@@ -104,9 +104,9 @@ window.addEventListener("load", function () {
       await sendFormData(formData);
       formEl.reset();
       // console.log(resp);
-      // clearCart();
-      // updateCartLength();
-      // window.location.pathname = "/order-confirmation-page";
+      clearCart();
+      updateCartLength();
+      window.location.pathname = "/order-confirmation-page";
     } catch (error) {
       alert("Oops! There was some error! Please try again.");
     }
