@@ -11,13 +11,13 @@ const creds = new AWS.Credentials({
 
 const S3 = new AWS.S3({ credentials: creds });
 
-const filesToUpload = ["checkout"];
+const filesToUpload = ["cart", "checkout", "index"];
 
 const returnPromise = (file) => {
   return new Promise((res, rej) => {
     S3.upload(
       {
-        Bucket: "ahaan-static-files",
+        Bucket: "steel-croissant-static-assets",
         Key: `siena/${file}.js`,
         Body: fs.createReadStream(`${file}.js`),
         ACL: "public-read",

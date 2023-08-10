@@ -45,22 +45,27 @@ const formId = "email-form",
       }
     return a;
   };
+
 window.addEventListener("load", () => {
-  const a = document.getElementById(formId);
-  a.addEventListener("submit", (a) => {
-    if (
-      (a.preventDefault(),
-      a.stopImmediatePropagation(),
-      a.stopPropagation(),
-      isFormValid())
-    ) {
-      const a = {};
-      for (const b of formFields) {
-        const { id: c, slug: d, isNumber: e } = b;
-        (a[d] = document.getElementById(c).value), e && (a[d] = +a[d]);
+  const formEl = document.getElementById(formId);
+  formEl.addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    ev.stopImmediatePropagation();
+    ev.stopPropagation();
+
+    if (isFormValid()) {
+      const formData = {};
+      for (const field of formFields) {
+        const { id, slug, isNumber } = field;
+
+        formData[slug] = document.getElementById(id).value;
+        if (isNumber) formData[slug] = +formData[slug];
       }
-      const b = addItemToCart(a);
-      updateCartLength(b), openCart(), renderCartItems();
+      // console.log(JSON.stringify(a));
+      const newCartLength = addItemToCart(a);
+      updateCartLength(newCartLength);
+      openCart();
+      renderCartItems();
     }
   });
 });
